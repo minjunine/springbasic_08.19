@@ -26,6 +26,7 @@ public class SampleServiceImplement implements SampleService {
         // SELECT (SQL : SELECT)
         // 1. repository를 이용하여 조회 (findAll, findById)
         // SampleTable1Entity existEntity = sampleTable1Repository.findById(sampleId).get();
+        
         // 2. repository를 이용하여 조회 (existsById)
         boolean isExisted = sampleTable1Repository.existsById(sampleId);
         if (isExisted) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 기본키입니다.");
