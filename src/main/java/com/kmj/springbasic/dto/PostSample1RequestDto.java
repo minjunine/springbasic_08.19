@@ -21,4 +21,9 @@ public class PostSample1RequestDto {
 
     @NotNull
     private Integer sampleColumn;
+
+    public Integer getSampleTable1Entity(String sampleId2, Integer sampleColumn2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSampleTable1Entity'");
+    }
 }
