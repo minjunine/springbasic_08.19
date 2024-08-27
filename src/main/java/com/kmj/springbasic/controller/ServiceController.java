@@ -1,6 +1,6 @@
 package com.kmj.springbasic.controller;
 
-import java.util.*;
+// import java.util.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kmj.springbasic.service.BasicService;
-import com.kmj.springbasic.service.implement.BasicServiceImplement;
+// import com.kmj.springbasic.service.implement.BasicServiceImplement;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +41,7 @@ public class ServiceController {
     // }
 
     // 생성자
-    private final BasicService basicService;
+    final private BasicService basicService;
 
     // 생성자를 통한 의존성 주입 방식에는 @Autowired를 걸어줄 필요가 없음
     // @Autowired
@@ -49,7 +49,7 @@ public class ServiceController {
     //     this.basicService = basicService;
     // }
 
-    private Date today;
+    // private Date today;
     
     @GetMapping("")
     public ResponseEntity<String> getService() {

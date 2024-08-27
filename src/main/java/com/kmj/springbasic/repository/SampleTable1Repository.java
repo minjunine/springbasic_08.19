@@ -1,6 +1,9 @@
 package com.kmj.springbasic.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.kmj.springbasic.entity.SampleTable1Entity;
 
 // Repository 레이어:
 // - 데이터베이스 작업을 수행하는 영역
@@ -16,6 +19,6 @@ public interface SampleTable1Repository
 // - JPA 기반의 Repository를 생성할땐 필수로 상속해야함
 // - 매개타입 T : 해당 Repository가 어떤 Entity의 Repository인지 지정
 // - 매개타입 ID : 해당 Repository가 사용하는 Entity의 기본키 타입 지정
-extends JpaRepository<SampleTable1Entity, String> {
+extends JpaRepository <SampleTable1Entity, String> {
 
 }
