@@ -1,12 +1,16 @@
 package com.kmj.springbasic.service.implement;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.kmj.springbasic.dto.PostSample1RequestDto;
 import com.kmj.springbasic.entity.SampleTable1Entity;
+import com.kmj.springbasic.entity.SampleUserEntity;
 import com.kmj.springbasic.repository.SampleTable1Repository;
+import com.kmj.springbasic.repository.SampleUserRepository;
 import com.kmj.springbasic.service.SampleService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SampleServiceImplement implements SampleService {
 
+    private final SampleUserRepository sampleUserRepository;
     private final SampleTable1Repository sampleTable1Repository;
+    
 
     @Override
     public ResponseEntity<String> postSample1(PostSample1RequestDto dto) {
@@ -59,4 +65,13 @@ public class SampleServiceImplement implements SampleService {
 
         return ResponseEntity.status(HttpStatus.OK).body("성공");
     }
+
+    @Override
+    public ResponseEntity<String> queryString() {
+    
+    List<SampleUserEntity> sampleUserEntities = sampleUserRepository.getJpql2("홍길동", "부산광역시");
+
+    return ResponseEntity.status(HttpStatus.OK).body(sampleUserEntities.toString());    
+    }
+    
 }
