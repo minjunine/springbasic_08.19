@@ -44,4 +44,16 @@ public class SampleServiceImplement implements SampleService {
         return ResponseEntity.status(HttpStatus.CREATED).body("성공");
     }
     
+    @Override
+    public ResponseEntity<String> deleteSample1(String sampleId) {
+       
+        // DELETE (SQL : DELETE)
+        // 1. repository를 이용하여 ID(pk)에 해당하는 레코드 삭제
+        sampleTable1Repository.deleteById(sampleId);
+        // 2. 
+        SampleTable1Entity entity = sampleTable1Repository.findById(sampleId).get();
+        sampleTable1Repository.delete(entity);
+
+        return ResponseEntity.status(HttpStatus.OK).body("성공");
+    }
 }
