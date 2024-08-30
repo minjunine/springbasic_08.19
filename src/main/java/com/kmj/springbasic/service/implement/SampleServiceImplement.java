@@ -82,4 +82,10 @@ public class SampleServiceImplement implements SampleService {
         String jwt = jwtProvider.create(name);
         return jwt;
     }
+
+    @Override
+    public String validateJwt(String jwt) {
+        String subject = jwtProvider.validate(jwt);
+        return subject;
+    }
 }
