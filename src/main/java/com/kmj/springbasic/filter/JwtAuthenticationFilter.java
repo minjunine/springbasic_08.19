@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -74,7 +75,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     AbstractAuthenticationToken authenticationToken
         = new UsernamePasswordAuthenticationToken(userEntity, null,roles);
 
-        
+        // 5.2 인증 정보에 상세 리퀘스트를 등록
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
     } catch (Exception exception) {
         exception.printStackTrace();
