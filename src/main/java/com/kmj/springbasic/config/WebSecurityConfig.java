@@ -1,5 +1,7 @@
 package com.kmj.springbasic.config;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,8 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -19,6 +23,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.kmj.springbasic.filter.JwtAuthenticationFilter;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 // Spring Web 보안 설정 
@@ -81,15 +88,21 @@ public class WebSecurityConfig {
             .requestMatchers("/anyone/**").permitAll()
             .requestMatchers(HttpMethod.GET,"/sample/jwt/*").permitAll()
             .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/service").hasRole("ADMIN")
             .requestMatchers("/user/**").authenticated()
-            // .requestMatchers(HttpMethod.GET).authenticated()
+            //.requestMatchers(HttpMethod.GET).authenticated()
             .requestMatchers(HttpMethod.POST,"/notice").hasRole("ADMIN")
             //anyRequest(): requestMatchers로 지정한 메서드 혹은 URL이 아닌 모든 요청
             .anyRequest().authenticated()
     )
 
-            //JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    // 인증 및 인가 과정에서 발생한 예외를 직접 처리
+    .exceptionHandling(exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+        )
+        
+        //JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록
+         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
             return security.build();
     }
@@ -108,4 +121,19 @@ public class WebSecurityConfig {
         return source;
         
     }
+}
+
+// 인증 및 인가 실패 처리를 위한 커스텀 예외 (AuthenticationEntryPoint 인터페이스 구현)
+class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException, ServletException {
+        
+        authException.printStackTrace();
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN); 
+        response.getWriter().write("{\"message\": \"인증 및 인가에 실패했습니다.\"}");
+    }
+
 }
