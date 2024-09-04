@@ -66,5 +66,8 @@ extends JpaRepository<SampleUserEntity, String> {
     );
  
     
+    boolean existsByUserId(String userId);
+    boolean existsByTelNumber(String telNumber);
+
     SampleUserEntity findByUserId(String userId);
 }
