@@ -4,7 +4,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kmj.springbasic.dto.PostUserRequestDto;
+import com.kmj.springbasic.dto.SignInRequestDto;
 import com.kmj.springbasic.entity.SampleUserEntity;
+import com.kmj.springbasic.provider.JwtProvider;
 import com.kmj.springbasic.repository.SampleUserRepository;
 import com.kmj.springbasic.service.AuthService;
 
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
 
+    private final JwtProvider jwtProvider;
     private final SampleUserRepository sampleUserRepository;
 
     // PasswordEncoder 인터페이스:
@@ -23,8 +26,6 @@ public class AuthServiceImplement implements AuthService {
     // - String encoder(평문비밀번호): 평문비밀번호를 암호화하여 반환
     // - boolean matches(평문비밀번호, 암호화된비밀번호): 평문비밀번호와 암호화된 비밀번호가 일치하는지 여부를 반환
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    private CharSequence password;
 
     @Override
     public String signUp(PostUserRequestDto dto) {
@@ -57,7 +58,7 @@ public class AuthServiceImplement implements AuthService {
             //         .build();
 
             // 비밀번호 암호화
-            String pasword = dto.getPassword();
+            String password = dto.getPassword();
             String encodedPassword = passwordEncoder.encode(password);
             dto.setPassword(encodedPassword);
 
@@ -72,5 +73,29 @@ public class AuthServiceImplement implements AuthService {
         }
 
     }
-    
+
+        @Override
+        public String signIn(SignInRequestDto dto) {
+        
+        try {
+            String userId = dto.getUserId();
+            SampleUserEntity userEntity = sampleUserRepository.findByUserId(userId);
+            if (userEntity == null) return "로그인 정보가 일치하지 않습니다.";
+
+            String password = dto.getPassword();
+            String encodedPassword = userEntity.getPassword();
+
+            boolean isMatched = passwordEncoder.matches(password, encodedPassword);
+            if (!isMatched) return "로그인 정보가 일치하지 않습니다.";
+
+            String token = jwtProvider.create(userId);
+            return token;
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            return "예외 발생!";
+
+        }
+    }
+
 }
