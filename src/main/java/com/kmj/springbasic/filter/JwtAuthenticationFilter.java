@@ -1,8 +1,8 @@
 package com.kmj.springbasic.filter;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.kmj.springbasic.entity.SampleUserEntity;
 import com.kmj.springbasic.provider.JwtProvider;
 import com.kmj.springbasic.repository.SampleUserRepository;
 
