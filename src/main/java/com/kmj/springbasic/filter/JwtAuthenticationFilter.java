@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // 5.1 인증된 사용자 객체를 생성
     // UsernamePasswordAuthenticationToken(사용자 정보, 비밀번호, 권한);
     AbstractAuthenticationToken authenticationToken
-        = new UsernamePasswordAuthenticationToken(subject, null,roles);
+        = new UsernamePasswordAuthenticationToken(subject, null, roles);
 
         // 5.2 인증 정보에 상세 리퀘스트를 등록
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
